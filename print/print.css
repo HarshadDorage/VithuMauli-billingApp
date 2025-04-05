@@ -1,0 +1,33 @@
+
+/* Print-specific styles */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #bill-template, #bill-template * {
+        visibility: visible;
+    }
+    #bill-template {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 2px 0;
+        text-align: left;
+    }
+    th {
+        border-bottom: 1px solid #000;
+    }
+    .border-b {
+        border-bottom: 1px solid #000;
+    }
+}

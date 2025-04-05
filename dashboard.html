@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Billing - Owner Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-6">
+        <header class="bg-white shadow rounded-lg p-4 mb-6 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold text-blue-600">Vithu Mauli Misal and Dosa</h1>
+                <p class="text-gray-600">Owner Dashboard</p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span class="text-gray-700"><i class="fas fa-user mr-1"></i> Owner</span>
+                <button id="logout-btn" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 flex items-center">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                </button>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <!-- Today's Summary -->
+            <div class="bg-white shadow rounded-lg p-4">
+                <h2 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-calendar-day text-blue-500 mr-2"></i> Today's Summary
+                </h2>
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <span class="flex items-center"><i class="fas fa-receipt text-gray-500 mr-2"></i> Total Orders:</span>
+                        <span id="today-orders" class="font-medium">0</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="flex items-center"><i class="fas fa-rupee-sign text-gray-500 mr-2"></i> Total Sales:</span>
+                        <span id="today-sales" class="font-medium">₹0.00</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="flex items-center"><i class="fas fa-money-bill-wave text-gray-500 mr-2"></i> Expenses:</span>
+                        <span id="today-expenses" class="font-medium">₹0.00</span>
+                    </div>
+                    <div class="flex justify-between font-bold border-t pt-2 mt-2">
+                        <span class="flex items-center"><i class="fas fa-chart-line text-gray-500 mr-2"></i> Net Profit:</span>
+                        <span id="today-profit" class="text-green-600">₹0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monthly Summary -->
+            <div class="bg-white shadow rounded-lg p-4">
+                <h2 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-calendar-alt text-blue-500 mr-2"></i> Monthly Summary
+                </h2>
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <span class="flex items-center"><i class="fas fa-receipt text-gray-500 mr-2"></i> Total Orders:</span>
+                        <span id="month-orders" class="font-medium">0</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="flex items-center"><i class="fas fa-rupee-sign text-gray-500 mr-2"></i> Total Sales:</span>
+                        <span id="month-sales" class="font-medium">₹0.00</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="flex items-center"><i class="fas fa-money-bill-wave text-gray-500 mr-2"></i> Total Expenses:</span>
+                        <span id="month-expenses" class="font-medium">₹0.00</span>
+                    </div>
+                    <div class="flex justify-between font-bold border-t pt-2 mt-2">
+                        <span class="flex items-center"><i class="fas fa-chart-line text-gray-500 mr-2"></i> Net Profit:</span>
+                        <span id="month-profit" class="text-green-600">₹0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white shadow rounded-lg p-4">
+                <h2 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-bolt text-blue-500 mr-2"></i> Quick Actions
+                </h2>
+                <div class="space-y-3">
+                    <button id="add-expense-btn" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 flex items-center justify-center">
+                        <i class="fas fa-plus mr-2"></i> Add Expense
+                    </button>
+                    <button id="view-orders-btn" class="w-full border border-blue-500 text-blue-500 py-2 rounded-lg hover:bg-blue-50 flex items-center justify-center">
+                        <i class="fas fa-list-alt mr-2"></i> View All Orders
+                    </button>
+                    <button id="view-expenses-btn" class="w-full border border-blue-500 text-blue-500 py-2 rounded-lg hover:bg-blue-50 flex items-center justify-center">
+                        <i class="fas fa-file-invoice-dollar mr-2"></i> View All Expenses
+                    </button>
+                    <button id="reset-orders-btn" class="w-full border border-red-500 text-red-500 py-2 rounded-lg hover:bg-red-50 flex items-center justify-center">
+                        <i class="fas fa-sync-alt mr-2"></i> Reset Order Numbers
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sales Chart -->
+        <div class="bg-white shadow rounded-lg p-4 mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold flex items-center">
+                    <i class="fas fa-chart-bar text-blue-500 mr-2"></i> Sales Overview (Last 7 Days)
+                </h2>
+                <div class="flex space-x-2">
+                    <button id="refresh-chart" class="text-blue-500 hover:underline flex items-center">
+                        <i class="fas fa-sync-alt mr-1"></i> Refresh
+                    </button>
+                </div>
+            </div>
+            <canvas id="sales-chart" height="300"></canvas>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Recent Orders -->
+            <div class="bg-white shadow rounded-lg p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold flex items-center">
+                        <i class="fas fa-clock text-blue-500 mr-2"></i> Recent Orders
+                    </h2>
+                    <button id="refresh-orders" class="text-blue-500 hover:underline flex items-center">
+                        <i class="fas fa-sync-alt mr-1"></i> Refresh
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b">
+                                <th class="text-left py-2">Order ID</th>
+                                <th class="text-left py-2">Date</th>
+                                <th class="text-right py-2">Amount</th>
+                                <th class="text-right py-2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-orders">
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-gray-500">Loading orders...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recent Expenses -->
+            <div class="bg-white shadow rounded-lg p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold flex items-center">
+                        <i class="fas fa-file-invoice-dollar text-blue-500 mr-2"></i> Recent Expenses
+                    </h2>
+                    <button id="refresh-expenses" class="text-blue-500 hover:underline flex items-center">
+                        <i class="fas fa-sync-alt mr-1"></i> Refresh
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b">
+                                <th class="text-left py-2">Date</th>
+                                <th class="text-left py-2">Description</th>
+                                <th class="text-right py-2">Amount</th>
+                                <th class="text-right py-2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-expenses">
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-gray-500">Loading expenses...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Expense Modal -->
+    <div id="expense-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold flex items-center">
+                    <i class="fas fa-plus-circle text-blue-500 mr-2"></i> Add New Expense
+                </h3>
+                <button id="close-expense-modal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="expense-form">
+                <div class="mb-4">
+                    <label for="expense-date" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                    <div class="relative">
+                        <input type="date" id="expense-date" name="date" required 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <i class="fas fa-calendar absolute right-3 top-3 text-gray-400"></i>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="expense-description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <div class="relative">
+                        <input type="text" id="expense-description" name="description" required 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <i class="fas fa-pen absolute right-3 top-3 text-gray-400"></i>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="expense-amount" class="block text-sm font-medium text-gray-700 mb-1">Amount (₹)</label>
+                    <div class="relative">
+                        <input type="number" id="expense-amount" name="amount" min="0" step="0.01" required 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <i class="fas fa-rupee-sign absolute right-3 top-3 text-gray-400"></i>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button type="button" id="cancel-expense" class="px-4 py-2 border border-gray-300 rounded-lg flex items-center">
+                        <i class="fas fa-times mr-1"></i> Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center">
+                        <i class="fas fa-save mr-1"></i> Save Expense
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div id="order-details-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4 max-h-[80vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold flex items-center">
+                    <i class="fas fa-receipt text-blue-500 mr-2"></i> Order Details
+                </h3>
+                <button id="close-order-details" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="order-details-content">
+                <!-- Order details will be loaded here -->
+            </div>
+            <div class="flex justify-end mt-4">
+                <button id="print-order-btn" class="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center mr-2">
+                    <i class="fas fa-print mr-1"></i> Print
+                </button>
+                <button id="close-order-details-btn" class="px-4 py-2 bg-gray-500 text-white rounded-lg flex items-center">
+                    <i class="fas fa-times mr-1"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirm-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold flex items-center">
+                    <i class="fas fa-exclamation-triangle text-yellow-500 mr-2"></i> Confirm Action
+                </h3>
+                <button id="close-confirm-modal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="confirm-message" class="mb-4">
+                Are you sure you want to perform this action?
+            </div>
+            <div class="flex justify-end gap-2">
+                <button id="cancel-confirm" class="px-4 py-2 border border-gray-300 rounded-lg flex items-center">
+                    <i class="fas fa-times mr-1"></i> Cancel
+                </button>
+                <button id="confirm-action" class="px-4 py-2 bg-red-600 text-white rounded-lg flex items-center">
+                    <i class="fas fa-check mr-1"></i> Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check authentication
+            if (!localStorage.getItem('isLoggedIn')) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Setup event listeners
+            setupEventListeners();
+
+            // Load data
+            loadDashboardData();
+            loadRecentOrders();
+            loadRecentExpenses();
+            renderSalesChart();
+        });
+
+        function setupEventListeners() {
+            // Logout button
+            document.getElementById('logout-btn').addEventListener('click', logout);
+
+            // Expense buttons
+            document.getElementById('add-expense-btn').addEventListener('click', () => {
+                document.getElementById('expense-modal').classList.remove('hidden');
+                document.getElementById('expense-date').valueAsDate = new Date();
+            });
+
+            document.getElementById('close-expense-modal').addEventListener('click', () => {
+                document.getElementById('expense-modal').classList.add('hidden');
+            });
+
+            document.getElementById('cancel-expense').addEventListener('click', () => {
+                document.getElementById('expense-modal').classList.add('hidden');
+            });
+
+            document.getElementById('expense-form').addEventListener('submit', addExpense);
+
+            // View buttons
+            document.getElementById('view-orders-btn').addEventListener('click', () => {
+                loadRecentOrders(true); // Load all orders
+            });
+
+            document.getElementById('view-expenses-btn').addEventListener('click', () => {
+                loadRecentExpenses(true); // Load all expenses
+            });
+
+            // Refresh buttons
+            document.getElementById('refresh-orders').addEventListener('click', () => {
+                loadRecentOrders();
+            });
+
+            document.getElementById('refresh-expenses').addEventListener('click', () => {
+                loadRecentExpenses();
+            });
+
+            document.getElementById('refresh-chart').addEventListener('click', () => {
+                renderSalesChart();
+            });
+
+            // Close order details modal
+            document.getElementById('close-order-details').addEventListener('click', () => {
+                document.getElementById('order-details-modal').classList.add('hidden');
+            });
+
+            document.getElementById('close-order-details-btn').addEventListener('click', () => {
+                document.getElementById('order-details-modal').classList.add('hidden');
+            });
+
+            // Print order button
+            document.getElementById('print-order-btn').addEventListener('click', printOrderDetails);
+
+            // Reset order numbers
+            document.getElementById('reset-orders-btn').addEventListener('click', () => {
+                showConfirmModal(
+                    'Reset Order Numbers',
+                    'This will reset all order numbers starting from 1. Continue?',
+                    resetOrderNumbers
+                );
+            });
+
+            // Confirmation modal
+            document.getElementById('close-confirm-modal').addEventListener('click', () => {
+                document.getElementById('confirm-modal').classList.add('hidden');
+            });
+
+            document.getElementById('cancel-confirm').addEventListener('click', () => {
+                document.getElementById('confirm-modal').classList.add('hidden');
+            });
+        }
+
+        function loadDashboardData() {
+            const orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
+            const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+
+            // Today's date
+            const today = new Date().toISOString().split('T')[0];
+
+            // Today's summary
+            const todayOrders = orders.filter(order => order.date.includes(today));
+            const todaySales = todayOrders.reduce((sum, order) => sum + order.total, 0);
+            const todayExpenses = expenses.filter(exp => exp.date === today)
+                .reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
+            const todayProfit = todaySales - todayExpenses;
+
+            document.getElementById('today-orders').textContent = todayOrders.length;
+            document.getElementById('today-sales').textContent = `₹${todaySales.toFixed(2)}`;
+            document.getElementById('today-expenses').textContent = `₹${todayExpenses.toFixed(2)}`;
+            document.getElementById('today-profit').textContent = `₹${todayProfit.toFixed(2)}`;
+            document.getElementById('today-profit').className = todayProfit >= 0 ? 
+                'font-bold text-green-600' : 'font-bold text-red-600';
+
+            // Monthly summary (current month)
+            const currentMonth = new Date().getMonth() + 1;
+            const currentYear = new Date().getFullYear();
+            
+            const monthOrders = orders.filter(order => {
+                const orderDate = new Date(order.date);
+                return orderDate.getMonth() + 1 === currentMonth && orderDate.getFullYear() === currentYear;
+            });
+            
+            const monthSales = monthOrders.reduce((sum, order) => sum + order.total, 0);
+            
+            const monthExpenses = expenses.filter(exp => {
+                const expDate = new Date(exp.date);
+                return expDate.getMonth() + 1 === currentMonth && expDate.getFullYear() === currentYear;
+            }).reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
+            
+            const monthProfit = monthSales - monthExpenses;
+
+            document.getElementById('month-orders').textContent = monthOrders.length;
+            document.getElementById('month-sales').textContent = `₹${monthSales.toFixed(2)}`;
+            document.getElementById('month-expenses').textContent = `₹${monthExpenses.toFixed(2)}`;
+            document.getElementById('month-profit').textContent = `₹${monthProfit.toFixed(2)}`;
+            document.getElementById('month-profit').className = monthProfit >= 0 ? 
+                'font-bold text-green-600' : 'font-bold text-red-600';
+        }
+
+        function loadRecentOrders(showAll = false) {
+            const orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
+            const ordersContainer = document.getElementById('recent-orders');
+            
+            // Sort by date (newest first)
+            orders.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Limit to 10 if not showing all
+            const displayOrders = showAll ? orders : orders.slice(0, 10);
+            
+            if (displayOrders.length === 0) {
+                ordersContainer.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="text-center py-4 text-gray-500">No orders found</td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            ordersContainer.innerHTML = '';
+            
+            displayOrders.forEach((order, index) => {
+                const orderDate = new Date(order.date);
+                const row = document.createElement('tr');
+                row.className = 'border-b hover:bg-gray-50';
+                row.innerHTML = `
+                    <td class="py-2">${order.id}</td>
+                    <td class="py-2">${orderDate.toLocaleDateString()}</td>
+                    <td class="py-2 text-right">₹${order.total.toFixed(2)}</td>
+                    <td class="py-2 text-right">
+                        <button class="view-order text-blue-500 hover:underline mr-2" data-id="${order.id}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="delete-order text-red-500 hover:underline" data-id="${order.id}" data-index="${index}">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                `;
+                ordersContainer.appendChild(row);
+            });
+            
+            // Add event listeners to view buttons
+            document.querySelectorAll('.view-order').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const orderId = parseInt(e.target.closest('button').dataset.id);
+                    showOrderDetails(orderId);
+                });
+            });
+            
+            // Add event listeners to delete buttons
+            document.querySelectorAll('.delete-order').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const orderId = parseInt(e.target.closest('button').dataset.id);
+                    const orderIndex = parseInt(e.target.closest('button').dataset.index);
+                    
+                    showConfirmModal(
+                        'Delete Order',
+                        `Are you sure you want to delete Order #${orderId}?`,
+                        () => deleteOrder(orderId, orderIndex)
+                    );
+                });
+            });
+        }
+
+        function deleteOrder(orderId, orderIndex) {
+            let orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
+            orders.splice(orderIndex, 1);
+            localStorage.setItem('orderHistory', JSON.stringify(orders));
+            
+            // Refresh data
+            loadDashboardData();
+            loadRecentOrders();
+            
+            // Hide confirmation modal
+            document.getElementById('confirm-modal').classList.add('hidden');
+        }
+
+        function loadRecentExpenses(showAll = false) {
+            const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+            const expensesContainer = document.getElementById('recent-expenses');
+            
+            // Sort by date (newest first)
+            expenses.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Limit to 10 if not showing all
+            const displayExpenses = showAll ? expenses : expenses.slice(0, 10);
+            
+            if (displayExpenses.length === 0) {
+                expensesContainer.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="text-center py-4 text-gray-500">No expenses found</td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            expensesContainer.innerHTML = '';
+            
+            displayExpenses.forEach((expense, index) => {
+                const expDate = new Date(expense.date);
+                const row = document.createElement('tr');
+                row.className = 'border-b hover:bg-gray-50';
+                row.innerHTML = `
+                    <td class="py-2">${expDate.toLocaleDateString()}</td>
+                    <td class="py-2">${expense.description}</td>
+                    <td class="py-2 text-right">₹${parseFloat(expense.amount).toFixed(2)}</td>
+                    <td class="py-2 text-right">
+                        <button class="delete-expense text-red-500 hover:underline" data-index="${index}">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                `;
+                expensesContainer.appendChild(row);
+            });
+            
+            // Add event listeners to delete buttons
+            document.querySelectorAll('.delete-expense').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const expenseIndex = parseInt(e.target.closest('button').dataset.index);
+                    const expense = JSON.parse(localStorage.getItem('expenses'))[expenseIndex];
+                    
+                    showConfirmModal(
+                        'Delete Expense',
+                        `Are you sure you want to delete expense "${expense.description}" (₹${expense.amount})?`,
+                        () => deleteExpense(expenseIndex)
+                    );
+                });
+            });
+        }
+
+        function addExpense(e) {
+            e.preventDefault();
+            
+            const date = document.getElementById('expense-date').value;
+            const description = document.getElementById('expense-description').value;
+            const amount = parseFloat(document.getElementById('expense-amount').value);
+            
+            if (!date || !description || isNaN(amount)) {
+                alert('Please fill all fields with valid data');
+                return;
+            }
+            
+            const expense = { date, description, amount };
+            const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+            expenses.push(expense);
+            localStorage.setItem('expenses', JSON.stringify(expenses));
+            
+            // Reset form and hide modal
+            e.target.reset();
+            document.getElementById('expense-modal').classList.add('hidden');
+            
+            // Refresh data
+            loadDashboardData();
+            loadRecentExpenses();
+            
+            // Show success message
+            showToast('Expense added successfully!', 'success');
+        }
+
+        function deleteExpense(index) {
+            const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+            expenses.splice(index, 1);
+            localStorage.setItem('expenses', JSON.stringify(expenses));
+            
+            // Refresh data
+            loadDashboardData();
+            loadRecentExpenses();
+            
+            // Hide confirmation modal
+            document.getElementById('confirm-modal').classList.add('hidden');
+            
+            // Show success message
+            showToast('Expense deleted successfully!', 'success');
+        }
+
+        function showOrderDetails(orderId) {
+            const orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
+            const order = orders.find(o => o.id === orderId);
+            
+            if (!order) {
+                alert('Order not found');
+                return;
+            }
+            
+            const orderDate = new Date(order.date);
+            let itemsHTML = '';
+            
+            order.items.forEach(item => {
+                itemsHTML += `
+                    <div class="flex justify-between py-1 border-b">
+                        <span>${item.name} x ${item.quantity}</span>
+                        <span>₹${(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                `;
+            });
+            
+            const content = `
+                <div class="mb-4">
+                    <div class="flex justify-between">
+                        <span class="font-semibold">Order ID:</span>
+                        <span>${order.id}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-semibold">Date:</span>
+                        <span>${orderDate.toLocaleString()}</span>
+                    </div>
+                </div>
+                
+                <h4 class="font-semibold mb-2">Items:</h4>
+                <div class="mb-4">
+                    ${itemsHTML}
+                </div>
+                
+                <div class="border-t pt-2">
+                    <div class="flex justify-between">
+                        <span class="font-semibold">Subtotal:</span>
+                        <span>₹${order.subtotal.toFixed(2)}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-semibold">Tax (10%):</span>
+                        <span>₹${order.tax.toFixed(2)}</span>
+                    </div>
+                    <div class="flex justify-between font-bold mt-1">
+                        <span>Total:</span>
+                        <span>₹${order.total.toFixed(2)}</span>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('order-details-content').innerHTML = content;
+            document.getElementById('order-details-modal').classList.remove('hidden');
+        }
+
+        function printOrderDetails() {
+            const printContent = document.getElementById('order-details-content').innerHTML;
+            const originalContent = document.body.innerHTML;
+            
+            document.body.innerHTML = `
+                <div class="p-4">
+                    <h1 class="text-2xl font-bold text-center mb-4">Vithu Mauli Misal and Dosa</h1>
+                    <h2 class="text-xl font-semibold text-center mb-6">Order Receipt</h2>
+                    ${printContent}
+                    <div class="mt-8 text-center text-sm text-gray-500">
+                        Thank you for your business!
+                    </div>
+                </div>
+            `;
+            
+            window.print();
+            document.body.innerHTML = originalContent;
+            loadRecentOrders();
+        }
+
+        function renderSalesChart() {
+            const orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
+            
+            // Get last 7 days
+            const dates = [];
+            const salesData = [];
+            
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                const dateString = date.toISOString().split('T')[0];
+                dates.push(date.toLocaleDateString(undefined, { weekday: 'short' }));
+                
+                const dayOrders = orders.filter(order => order.date.includes(dateString));
+                const daySales = dayOrders.reduce((sum, order) => sum + order.total, 0);
+                salesData.push(daySales);
+            }
+            
+            const ctx = document.getElementById('sales-chart').getContext('2d');
+            
+            // Destroy previous chart if it exists
+            if (window.salesChart) {
+                window.salesChart.destroy();
+            }
+            
+            window.salesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'Daily Sales (₹)',
+                        data: salesData,
+                        backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '₹' + value;
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Sales: ₹' + context.raw.toFixed(2);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = 'login.html';
+        }
+
+        function resetOrderNumbers() {
+            let orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
+            
+            // Sort orders by date (oldest first)
+            orders.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            // Reassign IDs starting from 1
+            orders.forEach((order, index) => {
+                order.id = index + 1;
+            });
+            
+            // Update lastBillNumber
+            const newLastBillNumber = orders.length > 0 ? orders.length : 1;
+            localStorage.setItem('lastBillNumber', newLastBillNumber.toString());
+            
+            // Save updated orders
+            localStorage.setItem('orderHistory', JSON.stringify(orders));
+            
+            // Refresh data
+            loadDashboardData();
+            loadRecentOrders();
+            
+            // Hide confirmation modal
+            document.getElementById('confirm-modal').classList.add('hidden');
+            
+            // Show success message
+            showToast('Order numbers reset successfully!', 'success');
+        }
+
+        function showConfirmModal(title, message, confirmCallback) {
+            document.getElementById('confirm-message').textContent = message;
+            document.querySelector('#confirm-modal h3').innerHTML = `
+                <i class="fas fa-exclamation-triangle text-yellow-500 mr-2"></i> ${title}
+            `;
+            
+            // Remove previous event listener
+            const confirmBtn = document.getElementById('confirm-action');
+            const newConfirmBtn = confirmBtn.cloneNode(true);
+            confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+            
+            newConfirmBtn.addEventListener('click', confirmCallback);
+            
+            document.getElementById('confirm-modal').classList.remove('hidden');
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg text-white ${
+                type === 'success' ? 'bg-green-500' : 'bg-red-500'
+            }`;
+            toast.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                setTimeout(() => {
+                    toast.remove();
+                }, 500);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
