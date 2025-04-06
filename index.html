@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,6 +30,10 @@
                 font-size: 14px;
             }
         }
+        .table-btn.active {
+            background-color: #10b981;
+            color: white;
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -40,11 +43,41 @@
             <p class="text-center text-gray-600">Yawat, Pune</p>
         </header>
 
+        <!-- Table Selection -->
+        <div class="bg-white shadow rounded-lg p-4 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Select Table</h2>
+            <div class="flex flex-wrap gap-2">
+                <button class="table-btn px-3 py-1 rounded-full border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition active" data-table="0">
+                    Walk-in
+                </button>
+                <button class="table-btn px-3 py-1 rounded-full border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition" data-table="1">
+                    Table 1
+                </button>
+                <button class="table-btn px-3 py-1 rounded-full border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition" data-table="2">
+                    Table 2
+                </button>
+                <button class="table-btn px-3 py-1 rounded-full border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition" data-table="3">
+                    Table 3
+                </button>
+                <button class="table-btn px-3 py-1 rounded-full border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition" data-table="4">
+                    Table 4
+                </button>
+                <button class="table-btn px-3 py-1 rounded-full border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition" data-table="5">
+                    Table 5
+                </button>
+            </div>
+        </div>
+
         <div class="flex flex-col md:flex-row gap-6">
             <!-- Menu Section -->
             <div class="w-full md:w-2/3">
                 <div class="bg-white shadow rounded-lg p-4 mb-4">
-                    <h2 class="text-xl font-semibold mb-4">Menu</h2>
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold">Menu</h2>
+                        <button id="edit-menu-btn" class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600">
+                            Edit Menu
+                        </button>
+                    </div>
                     <div class="flex flex-wrap gap-2 mb-4">
                         <button class="category-btn active px-3 py-1 rounded-full border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition" data-category="all">All</button>
                         <button class="category-btn px-3 py-1 rounded-full border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition" data-category="food">Food</button>
@@ -60,7 +93,7 @@
             <!-- Cart Section -->
             <div class="w-full md:w-1/3">
                 <div class="bg-white shadow rounded-lg p-4 sticky top-4">
-                    <h2 class="text-xl font-semibold mb-4">Your Order</h2>
+                    <h2 class="text-xl font-semibold mb-4">Your Order (<span id="current-table">Walk-in</span>)</h2>
                     <div id="cart-items" class="mb-4">
                         <p class="text-gray-500 text-center py-4">Your cart is empty</p>
                     </div>
@@ -84,6 +117,12 @@
                     <button id="clear-cart" class="w-full border border-red-500 text-red-500 py-2 rounded-lg mt-2 hover:bg-red-50">
                         Clear Cart
                     </button>
+                    <button id="hold-order" class="w-full border border-purple-500 text-purple-500 py-2 rounded-lg mt-2 hover:bg-purple-50">
+                        Hold Order
+                    </button>
+                    <button id="view-orders" class="w-full border border-green-500 text-green-500 py-2 rounded-lg mt-2 hover:bg-green-50">
+                        View Orders
+                    </button>
                     <a href="login.html" class="block text-center text-blue-500 mt-4 hover:underline">Owner Login</a>
                 </div>
             </div>
@@ -104,6 +143,43 @@
         </div>
     </div>
 
+    <!-- Edit Menu Modal -->
+    <div id="edit-menu-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 max-w-4xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+            <h3 class="text-xl font-semibold mb-4">Edit Menu</h3>
+            <div id="edit-menu-items" class="mb-4">
+                <!-- Menu items for editing will be loaded here -->
+            </div>
+            <button id="add-menu-item" class="px-4 py-2 bg-green-500 text-white rounded-lg mb-4">Add New Item</button>
+            <div class="flex justify-end gap-2">
+                <button id="cancel-edit-menu" class="px-4 py-2 border border-gray-300 rounded-lg">Cancel</button>
+                <button id="save-menu" class="px-4 py-2 bg-blue-600 text-white rounded-lg">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Orders Modal -->
+    <div id="view-orders-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 max-w-4xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+            <h3 class="text-xl font-semibold mb-4">All Orders</h3>
+            <div class="mb-4">
+                <h4 class="font-medium mb-2">Hold Orders</h4>
+                <div id="hold-orders-list" class="space-y-2">
+                    <!-- Hold orders will be loaded here -->
+                </div>
+            </div>
+            <div>
+                <h4 class="font-medium mb-2">Completed Orders</h4>
+                <div id="completed-orders-list" class="space-y-2">
+                    <!-- Completed orders will be loaded here -->
+                </div>
+            </div>
+            <div class="flex justify-end mt-4">
+                <button id="close-view-orders" class="px-4 py-2 border border-gray-300 rounded-lg">Close</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Bill Template (Hidden until printing) -->
     <div id="bill-template" class="print-only p-6 hidden">
         <div class="text-center mb-4">
@@ -115,6 +191,7 @@
         <div class="flex justify-between mb-2">
             <span>Bill No: <span id="bill-number">1</span></span>
             <span>Date: <span id="bill-date">01/01/2023</span></span>
+            <span>Table: <span id="bill-table">Walk-in</span></span>
         </div>
         <div class="border-b border-black mb-2"></div>
         <table class="w-full mb-4">
