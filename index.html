@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hotel Billing System</title>
+    <title>Vithu Mauli Misal & Dosa - Billing System</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="print/print.css" media="print">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @media (max-width: 640px) {
             .menu-item {
@@ -34,55 +34,89 @@
             background-color: #10b981;
             color: white;
         }
+        .menu-card {
+            transition: all 0.3s ease;
+        }
+        .menu-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .add-to-cart {
+            transition: all 0.2s ease;
+        }
+        .add-to-cart:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .add-to-cart.added {
+            background-color: #10b981 !important;
+        }
+        .hold-btn.active {
+            background-color: #f59e0b;
+            color: white;
+        }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-gray-50 min-h-screen">
     <div class="container mx-auto px-4 py-6 no-print">
-        <header class="bg-white shadow rounded-lg p-4 mb-6">
-            <h1 class="text-2xl font-bold text-center text-blue-600">विठू माऊली मिसळ आणि डोसा</h1>
-            <p class="text-center text-gray-600">Yawat, Pune</p>
+        <!-- Header -->
+        <header class="bg-white shadow-md rounded-lg p-4 mb-6 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold text-blue-600">विठू माऊली मिसळ आणि डोसा</h1>
+                <p class="text-gray-600">Yawat, Pune</p>
+            </div>
+            <a href="login.html" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                <i class="fas fa-user-shield mr-2"></i>Admin Login
+            </a>
         </header>
 
         <!-- Table Selection -->
-        <div class="bg-white shadow rounded-lg p-4 mb-6">
-            <h2 class="text-xl font-semibold mb-4">Select Table</h2>
-            <div class="flex flex-wrap gap-2">
-                <button class="table-btn px-3 py-1 rounded-full border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition active" data-table="0">
-                    Walk-in
+        <div class="bg-white shadow-md rounded-lg p-4 mb-6">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">
+                <i class="fas fa-table mr-2"></i>Select Table
+            </h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+                <button class="table-btn px-4 py-2 rounded-lg border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition active" data-table="0">
+                    <i class="fas fa-walking mr-2"></i>Walk-in
                 </button>
-                <button class="table-btn px-3 py-1 rounded-full border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition" data-table="1">
-                    Table 1
+                <button class="table-btn px-4 py-2 rounded-lg border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition" data-table="1">
+                    <i class="fas fa-utensils mr-2"></i>Table 1
                 </button>
-                <button class="table-btn px-3 py-1 rounded-full border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition" data-table="2">
-                    Table 2
+                <button class="table-btn px-4 py-2 rounded-lg border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition" data-table="2">
+                    <i class="fas fa-utensils mr-2"></i>Table 2
                 </button>
-                <button class="table-btn px-3 py-1 rounded-full border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition" data-table="3">
-                    Table 3
+                <button class="table-btn px-4 py-2 rounded-lg border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition" data-table="3">
+                    <i class="fas fa-utensils mr-2"></i>Table 3
                 </button>
-                <button class="table-btn px-3 py-1 rounded-full border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition" data-table="4">
-                    Table 4
+                <button class="table-btn px-4 py-2 rounded-lg border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition" data-table="4">
+                    <i class="fas fa-utensils mr-2"></i>Table 4
                 </button>
-                <button class="table-btn px-3 py-1 rounded-full border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition" data-table="5">
-                    Table 5
+                <button class="table-btn px-4 py-2 rounded-lg border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition" data-table="5">
+                    <i class="fas fa-utensils mr-2"></i>Table 5
                 </button>
             </div>
         </div>
 
-        <div class="flex flex-col md:flex-row gap-6">
+        <div class="flex flex-col lg:flex-row gap-6">
             <!-- Menu Section -->
-            <div class="w-full md:w-2/3">
-                <div class="bg-white shadow rounded-lg p-4 mb-4">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-semibold">Menu</h2>
-                        <button id="edit-menu-btn" class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600">
-                            Edit Menu
-                        </button>
-                    </div>
+            <div class="w-full lg:w-2/3">
+                <div class="bg-white shadow-md rounded-lg p-4 mb-4">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-800">
+                        <i class="fas fa-utensils mr-2"></i>Menu
+                    </h2>
                     <div class="flex flex-wrap gap-2 mb-4">
-                        <button class="category-btn active px-3 py-1 rounded-full border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition" data-category="all">All</button>
-                        <button class="category-btn px-3 py-1 rounded-full border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition" data-category="food">Food</button>
-                        <button class="category-btn px-3 py-1 rounded-full border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition" data-category="beverage">Beverages</button>
-                        <button class="category-btn px-3 py-1 rounded-full border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition" data-category="dessert">Desserts</button>
+                        <button class="category-btn active px-4 py-2 rounded-lg border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition" data-category="all">
+                            <i class="fas fa-list mr-2"></i>All
+                        </button>
+                        <button class="category-btn px-4 py-2 rounded-lg border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition" data-category="maharashtrian">
+                            <i class="fas fa-pepper-hot mr-2"></i>Maharashtrian
+                        </button>
+                        <button class="category-btn px-4 py-2 rounded-lg border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition" data-category="south-indian">
+                            <i class="fas fa-flag mr-2"></i>South Indian
+                        </button>
+                        <button class="category-btn px-4 py-2 rounded-lg border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition" data-category="drinks">
+                            <i class="fas fa-glass-whiskey mr-2"></i>Drinks
+                        </button>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="menu-items">
                         <!-- Menu items will be loaded here -->
@@ -91,39 +125,36 @@
             </div>
 
             <!-- Cart Section -->
-            <div class="w-full md:w-1/3">
-                <div class="bg-white shadow rounded-lg p-4 sticky top-4">
-                    <h2 class="text-xl font-semibold mb-4">Your Order (<span id="current-table">Walk-in</span>)</h2>
-                    <div id="cart-items" class="mb-4">
+            <div class="w-full lg:w-1/3">
+                <div class="bg-white shadow-md rounded-lg p-4 sticky top-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold text-gray-800">
+                            <i class="fas fa-shopping-cart mr-2"></i>Order (<span id="current-table">Walk-in</span>)
+                        </h2>
+                        <button id="hold-order" class="hold-btn px-3 py-1 rounded-lg border border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-white transition">
+                            <i class="fas fa-pause mr-1"></i>Hold
+                        </button>
+                    </div>
+                    <div id="cart-items" class="mb-4 max-h-96 overflow-y-auto">
                         <p class="text-gray-500 text-center py-4">Your cart is empty</p>
                     </div>
                     <div class="border-t pt-4">
                         <div class="flex justify-between mb-2">
-                            <span>Subtotal:</span>
-                            <span id="subtotal">₹0.00</span>
+                            <span class="text-gray-700">Subtotal:</span>
+                            <span id="subtotal" class="font-medium">₹0.00</span>
                         </div>
                         <div class="flex justify-between mb-2">
-                            <span>Tax (10%):</span>
-                            <span id="tax">₹0.00</span>
+                            <span class="text-gray-700">Tax (10%):</span>
+                            <span id="tax" class="font-medium">₹0.00</span>
                         </div>
-                        <div class="flex justify-between font-bold text-lg">
-                            <span>Total:</span>
-                            <span id="total">₹0.00</span>
+                        <div class="flex justify-between font-bold text-lg border-t pt-2 mt-2">
+                            <span class="text-gray-800">Total:</span>
+                            <span id="total" class="text-blue-600">₹0.00</span>
                         </div>
                     </div>
-                    <button id="checkout-btn" class="w-full bg-blue-600 text-white py-2 rounded-lg mt-4 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>
-                        Place Order
+                    <button id="checkout-btn" class="w-full bg-blue-600 text-white py-3 rounded-lg mt-4 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition" disabled>
+                        <i class="fas fa-paper-plane mr-2"></i>Place Order
                     </button>
-                    <button id="clear-cart" class="w-full border border-red-500 text-red-500 py-2 rounded-lg mt-2 hover:bg-red-50">
-                        Clear Cart
-                    </button>
-                    <button id="hold-order" class="w-full border border-purple-500 text-purple-500 py-2 rounded-lg mt-2 hover:bg-purple-50">
-                        Hold Order
-                    </button>
-                    <button id="view-orders" class="w-full border border-green-500 text-green-500 py-2 rounded-lg mt-2 hover:bg-green-50">
-                        View Orders
-                    </button>
-                    <a href="login.html" class="block text-center text-blue-500 mt-4 hover:underline">Owner Login</a>
                 </div>
             </div>
         </div>
@@ -132,50 +163,36 @@
     <!-- Order Confirmation Modal -->
     <div id="order-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 class="text-xl font-semibold mb-4">Order Confirmation</h3>
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">
+                <i class="fas fa-check-circle mr-2 text-green-500"></i>Order Confirmation
+            </h3>
             <div id="order-summary">
                 <!-- Order summary will be shown here -->
             </div>
             <div class="flex justify-end gap-2 mt-6">
-                <button id="cancel-order" class="px-4 py-2 border border-gray-300 rounded-lg">Cancel</button>
-                <button id="confirm-order" class="px-4 py-2 bg-blue-600 text-white rounded-lg">Confirm & Print</button>
+                <button id="cancel-order" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition">
+                    <i class="fas fa-times mr-2"></i>Cancel
+                </button>
+                <button id="confirm-order" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                    <i class="fas fa-check mr-2"></i>Confirm
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Edit Menu Modal -->
-    <div id="edit-menu-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg p-6 max-w-4xl w-full mx-4 max-h-[80vh] overflow-y-auto">
-            <h3 class="text-xl font-semibold mb-4">Edit Menu</h3>
-            <div id="edit-menu-items" class="mb-4">
-                <!-- Menu items for editing will be loaded here -->
+    <!-- Hold Orders Modal -->
+    <div id="hold-orders-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 w-full max-w-2xl mx-4">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">
+                <i class="fas fa-pause-circle mr-2 text-yellow-500"></i>Hold Orders
+            </h3>
+            <div id="hold-orders-list" class="mb-4 max-h-96 overflow-y-auto">
+                <!-- Held orders will be shown here -->
             </div>
-            <button id="add-menu-item" class="px-4 py-2 bg-green-500 text-white rounded-lg mb-4">Add New Item</button>
-            <div class="flex justify-end gap-2">
-                <button id="cancel-edit-menu" class="px-4 py-2 border border-gray-300 rounded-lg">Cancel</button>
-                <button id="save-menu" class="px-4 py-2 bg-blue-600 text-white rounded-lg">Save Changes</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- View Orders Modal -->
-    <div id="view-orders-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg p-6 max-w-4xl w-full mx-4 max-h-[80vh] overflow-y-auto">
-            <h3 class="text-xl font-semibold mb-4">All Orders</h3>
-            <div class="mb-4">
-                <h4 class="font-medium mb-2">Hold Orders</h4>
-                <div id="hold-orders-list" class="space-y-2">
-                    <!-- Hold orders will be loaded here -->
-                </div>
-            </div>
-            <div>
-                <h4 class="font-medium mb-2">Completed Orders</h4>
-                <div id="completed-orders-list" class="space-y-2">
-                    <!-- Completed orders will be loaded here -->
-                </div>
-            </div>
-            <div class="flex justify-end mt-4">
-                <button id="close-view-orders" class="px-4 py-2 border border-gray-300 rounded-lg">Close</button>
+            <div class="flex justify-end gap-2 mt-6">
+                <button id="close-hold-modal" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition">
+                    <i class="fas fa-times mr-2"></i>Close
+                </button>
             </div>
         </div>
     </div>
@@ -188,13 +205,13 @@
             <p class="text-sm">Phone: +91 987654XXXX</p>
         </div>
         <div class="border-b border-black mb-2"></div>
-        <div class="flex justify-between mb-2">
+        <div class="flex justify-between mb-2 text-sm">
             <span>Bill No: <span id="bill-number">1</span></span>
             <span>Date: <span id="bill-date">01/01/2023</span></span>
             <span>Table: <span id="bill-table">Walk-in</span></span>
         </div>
         <div class="border-b border-black mb-2"></div>
-        <table class="w-full mb-4">
+        <table class="w-full mb-4 text-sm">
             <thead>
                 <tr class="border-b border-black">
                     <th class="text-left pb-1">Item</th>
@@ -208,15 +225,15 @@
             </tbody>
         </table>
         <div class="border-b border-black mb-2"></div>
-        <div class="flex justify-between mb-1">
+        <div class="flex justify-between mb-1 text-sm">
             <span>Subtotal:</span>
             <span id="bill-subtotal">₹0.00</span>
         </div>
-        <div class="flex justify-between mb-1">
+        <div class="flex justify-between mb-1 text-sm">
             <span>Tax (10%):</span>
             <span id="bill-tax">₹0.00</span>
         </div>
-        <div class="flex justify-between font-bold">
+        <div class="flex justify-between font-bold text-sm border-t pt-1 mt-1">
             <span>Grand Total:</span>
             <span id="bill-total">₹0.00</span>
         </div>
@@ -225,6 +242,549 @@
         <p class="text-center text-xs mt-2">** This is a computer generated bill **</p>
     </div>
 
-    <script src="js/app.js"></script>
+    <script>
+        // Menu Data
+        let menuItems = JSON.parse(localStorage.getItem('menuItems')) || [
+            // Maharashtrian
+            { id: 1, name: "Misal Pav", category: "maharashtrian", price: 70, description: "Spicy curry with bread" },
+            { id: 2, name: "Vada Pav", category: "maharashtrian", price: 20, description: "Indian burger" },
+            { id: 3, name: "Pav Bhaji", category: "maharashtrian", price: 80, description: "Buttered bread with vegetable curry" },
+            { id: 4, name: "Thalipeeth", category: "maharashtrian", price: 60, description: "Multigrain pancake" },
+            { id: 5, name: "Puran Poli", category: "maharashtrian", price: 50, description: "Sweet flatbread" },
+            
+            // South Indian
+            { id: 6, name: "Masala Dosa", category: "south-indian", price: 60, description: "Dosa with potato filling" },
+            { id: 7, name: "Idli Sambar", category: "south-indian", price: 50, description: "Steamed rice cakes with lentil soup" },
+            { id: 8, name: "Medu Vada", category: "south-indian", price: 50, description: "Savory fried donut" },
+            { id: 9, name: "Rava Dosa", category: "south-indian", price: 70, description: "Crispy semolina dosa" },
+            { id: 10, name: "Uttapam", category: "south-indian", price: 60, description: "Thick pancake with toppings" },
+            
+            // Drinks
+            { id: 11, name: "Tea", category: "drinks", price: 15, description: "Traditional Indian tea" },
+            { id: 12, name: "Coffee", category: "drinks", price: 20, description: "Filter coffee" },
+            { id: 13, name: "Lassi", category: "drinks", price: 40, description: "Yogurt-based drink" },
+            { id: 14, name: "Buttermilk", category: "drinks", price: 25, description: "Spiced buttermilk" },
+            { id: 15, name: "Lemonade", category: "drinks", price: 30, description: "Fresh lemon drink" }
+        ];
+
+        // DOM Elements
+        const menuItemsContainer = document.getElementById('menu-items');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const subtotalElement = document.getElementById('subtotal');
+        const totalElement = document.getElementById('total');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        const orderModal = document.getElementById('order-modal');
+        const orderSummary = document.getElementById('order-summary');
+        const confirmOrderBtn = document.getElementById('confirm-order');
+        const cancelOrderBtn = document.getElementById('cancel-order');
+        const billTemplate = document.getElementById('bill-template');
+        const billItemsContainer = document.getElementById('bill-items');
+        const billSubtotal = document.getElementById('bill-subtotal');
+        const billTotal = document.getElementById('bill-total');
+        const billNumber = document.getElementById('bill-number');
+        const billDate = document.getElementById('bill-date');
+        const billTable = document.getElementById('bill-table');
+        const tableButtons = document.querySelectorAll('.table-btn');
+        const currentTableDisplay = document.getElementById('current-table');
+        const holdOrderBtn = document.getElementById('hold-order');
+        const holdOrdersModal = document.getElementById('hold-orders-modal');
+        const holdOrdersList = document.getElementById('hold-orders-list');
+        const closeHoldModalBtn = document.getElementById('close-hold-modal');
+
+        // State
+        let currentTable = 0; // 0 = Walk-in, 1-5 = Table 1-5
+        let cart = [];
+        let orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+        let heldOrders = JSON.parse(localStorage.getItem('heldOrders')) || [];
+        let currentBillNumber = parseInt(localStorage.getItem('lastBillNumber')) || 1;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMenuItems();
+            renderCart();
+            setupEventListeners();
+            updateTableDisplay();
+        });
+
+        // Event Listeners
+        function setupEventListeners() {
+            // Category filtering
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    renderMenuItems(button.dataset.category);
+                });
+            });
+
+            // Table selection
+            tableButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tableButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    currentTable = parseInt(button.dataset.table);
+                    updateTableDisplay();
+                    
+                    // Check if there's a held order for this table
+                    const heldOrder = heldOrders.find(order => order.table === currentTable);
+                    if (heldOrder) {
+                        if (confirm(`Table ${currentTable === 0 ? 'Walk-in' : currentTable} has a held order. Load it?`)) {
+                            cart = [...heldOrder.items];
+                            updateCart();
+                        }
+                    } else if (cart.length > 0) {
+                        if (confirm('Switching tables will clear current cart. Continue?')) {
+                            cart = [];
+                            updateCart();
+                        } else {
+                            // Revert table selection
+                            const currentBtn = document.querySelector(`.table-btn[data-table="${currentTable}"]`);
+                            currentBtn.classList.remove('active');
+                            button.classList.add('active');
+                            currentTable = parseInt(button.dataset.table);
+                            updateTableDisplay();
+                            return;
+                        }
+                    }
+                    
+                    updateCart();
+                });
+            });
+
+            // Cart buttons
+            checkoutBtn.addEventListener('click', showOrderConfirmation);
+
+            // Order modal buttons
+            confirmOrderBtn.addEventListener('click', confirmOrder);
+            cancelOrderBtn.addEventListener('click', () => {
+                orderModal.classList.add('hidden');
+            });
+
+            // Hold order button
+            holdOrderBtn.addEventListener('click', toggleHoldOrder);
+
+            // Hold orders modal
+            closeHoldModalBtn.addEventListener('click', () => {
+                holdOrdersModal.classList.add('hidden');
+            });
+        }
+
+        // Render Menu Items
+        function renderMenuItems(category = 'all') {
+            menuItemsContainer.innerHTML = '';
+            
+            const filteredItems = category === 'all' 
+                ? menuItems 
+                : menuItems.filter(item => item.category === category);
+            
+            if (filteredItems.length === 0) {
+                menuItemsContainer.innerHTML = '<p class="text-gray-500 col-span-3 text-center py-4">No items found in this category</p>';
+                return;
+            }
+            
+            filteredItems.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'menu-item bg-white rounded-lg shadow p-4 flex flex-col menu-card';
+                itemElement.innerHTML = `
+                    <h3 class="font-semibold text-gray-800">${item.name}</h3>
+                    <p class="text-sm text-gray-600 mb-2">${item.description}</p>
+                    <div class="mt-auto flex justify-between items-center">
+                        <span class="font-bold text-blue-600">₹${item.price.toFixed(2)}</span>
+                        <button class="add-to-cart bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition" data-id="${item.id}">
+                            <i class="fas fa-plus mr-1"></i>Add
+                        </button>
+                    </div>
+                `;
+                menuItemsContainer.appendChild(itemElement);
+            });
+
+            // Add event listeners to all add-to-cart buttons
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const itemId = parseInt(e.target.closest('button').dataset.id);
+                    addToCart(itemId);
+                    
+                    // Add visual feedback
+                    const btn = e.target.closest('button');
+                    btn.classList.add('added');
+                    btn.innerHTML = '<i class="fas fa-check mr-1"></i>Added';
+                    
+                    setTimeout(() => {
+                        btn.classList.remove('added');
+                        btn.innerHTML = '<i class="fas fa-plus mr-1"></i>Add';
+                    }, 1000);
+                });
+            });
+        }
+
+        // Cart Functions
+        function addToCart(itemId) {
+            const item = menuItems.find(i => i.id === itemId);
+            if (!item) return;
+
+            const existingItem = cart.find(i => i.id === itemId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ ...item, quantity: 1 });
+            }
+
+            updateCart();
+        }
+
+        function updateCart() {
+            renderCart();
+            saveCartToLocalStorage();
+            updateCheckoutButton();
+        }
+
+        function renderCart() {
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p class="text-gray-500 text-center py-4">Your cart is empty</p>';
+                subtotalElement.textContent = '₹0.00';
+                totalElement.textContent = '₹0.00';
+                return;
+            }
+
+            cartItemsContainer.innerHTML = '';
+            let subtotal = 0;
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+
+                const itemElement = document.createElement('div');
+                itemElement.className = 'flex justify-between items-center py-3 border-b';
+                itemElement.innerHTML = `
+                    <div class="flex-1">
+                        <h4 class="font-medium text-gray-800">${item.name}</h4>
+                        <div class="flex items-center mt-1">
+                            <button class="decrease-quantity text-gray-500 hover:text-gray-700" data-id="${item.id}">
+                                <i class="fas fa-minus-circle"></i>
+                            </button>
+                            <span class="quantity mx-3 font-medium">${item.quantity}</span>
+                            <button class="increase-quantity text-gray-500 hover:text-gray-700" data-id="${item.id}">
+                                <i class="fas fa-plus-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="item-total font-medium text-gray-800">₹${itemTotal.toFixed(2)}</span>
+                        <button class="remove-item block text-red-500 text-xs mt-1 hover:underline" data-id="${item.id}">
+                            <i class="fas fa-trash-alt mr-1"></i>Remove
+                        </button>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(itemElement);
+            });
+
+            const tax = subtotal * 0.10;
+            const total = subtotal + tax;
+
+            subtotalElement.textContent = `₹${subtotal.toFixed(2)}`;
+            document.getElementById('tax').textContent = `₹${tax.toFixed(2)}`;
+            totalElement.textContent = `₹${total.toFixed(2)}`;
+
+            // Add event listeners to quantity buttons
+            document.querySelectorAll('.increase-quantity').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const itemId = parseInt(e.target.closest('button').dataset.id);
+                    increaseQuantity(itemId);
+                });
+            });
+
+            document.querySelectorAll('.decrease-quantity').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const itemId = parseInt(e.target.closest('button').dataset.id);
+                    decreaseQuantity(itemId);
+                });
+            });
+
+            document.querySelectorAll('.remove-item').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const itemId = parseInt(e.target.closest('button').dataset.id);
+                    removeFromCart(itemId);
+                });
+            });
+        }
+
+        function increaseQuantity(itemId) {
+            const item = cart.find(i => i.id === itemId);
+            if (item) {
+                item.quantity += 1;
+                updateCart();
+            }
+        }
+
+        function decreaseQuantity(itemId) {
+            const item = cart.find(i => i.id === itemId);
+            if (item) {
+                if (item.quantity > 1) {
+                    item.quantity -= 1;
+                } else {
+                    cart = cart.filter(i => i.id !== itemId);
+                }
+                updateCart();
+            }
+        }
+
+        function removeFromCart(itemId) {
+            cart = cart.filter(i => i.id !== itemId);
+            updateCart();
+        }
+
+        function updateCheckoutButton() {
+            checkoutBtn.disabled = cart.length === 0;
+        }
+
+        // Table Functions
+        function updateTableDisplay() {
+            const tableNames = ['Walk-in', 'Table 1', 'Table 2', 'Table 3', 'Table 4', 'Table 5'];
+            currentTableDisplay.textContent = tableNames[currentTable];
+        }
+
+        // Hold Order Functions
+        function toggleHoldOrder() {
+            if (cart.length === 0) {
+                // Show held orders if cart is empty
+                showHeldOrders();
+                return;
+            }
+
+            // Check if there's already a held order for this table
+            const existingHoldIndex = heldOrders.findIndex(order => order.table === currentTable);
+            
+            if (existingHoldIndex >= 0) {
+                // Update existing hold
+                if (confirm('This table already has a held order. Replace it?')) {
+                    heldOrders[existingHoldIndex] = {
+                        table: currentTable,
+                        items: [...cart],
+                        timestamp: new Date().toISOString()
+                    };
+                    saveHeldOrders();
+                    alert('Order updated in hold!');
+                    cart = [];
+                    updateCart();
+                }
+            } else {
+                // Create new hold
+                heldOrders.push({
+                    table: currentTable,
+                    items: [...cart],
+                    timestamp: new Date().toISOString()
+                });
+                saveHeldOrders();
+                alert('Order held successfully!');
+                cart = [];
+                updateCart();
+            }
+        }
+
+        function showHeldOrders() {
+            if (heldOrders.length === 0) {
+                holdOrdersList.innerHTML = '<p class="text-gray-500 text-center py-4">No orders on hold</p>';
+            } else {
+                holdOrdersList.innerHTML = '';
+                heldOrders.forEach((order, index) => {
+                    const orderElement = document.createElement('div');
+                    orderElement.className = 'border-b py-3';
+                    
+                    const tableName = order.table === 0 ? 'Walk-in' : `Table ${order.table}`;
+                    const orderDate = new Date(order.timestamp).toLocaleString();
+                    const itemCount = order.items.reduce((sum, item) => sum + item.quantity, 0);
+                    const total = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    
+                    orderElement.innerHTML = `
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h4 class="font-medium">${tableName}</h4>
+                                <p class="text-sm text-gray-600">${itemCount} items | ₹${total.toFixed(2)}</p>
+                                <p class="text-xs text-gray-500">${orderDate}</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="load-hold-order px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition" data-index="${index}">
+                                    <i class="fas fa-upload mr-1"></i>Load
+                                </button>
+                                <button class="delete-hold-order px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition" data-index="${index}">
+                                    <i class="fas fa-trash-alt mr-1"></i>Delete
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    holdOrdersList.appendChild(orderElement);
+                });
+
+                // Add event listeners to hold order buttons
+                document.querySelectorAll('.load-hold-order').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const index = parseInt(e.target.closest('button').dataset.index);
+                        loadHeldOrder(index);
+                    });
+                });
+
+                document.querySelectorAll('.delete-hold-order').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const index = parseInt(e.target.closest('button').dataset.index);
+                        deleteHeldOrder(index);
+                    });
+                });
+            }
+            
+            holdOrdersModal.classList.remove('hidden');
+        }
+
+        function loadHeldOrder(index) {
+            if (index >= 0 && index < heldOrders.length) {
+                const order = heldOrders[index];
+                
+                // Switch to the table of the held order
+                tableButtons.forEach(btn => btn.classList.remove('active'));
+                const tableBtn = document.querySelector(`.table-btn[data-table="${order.table}"]`);
+                if (tableBtn) tableBtn.classList.add('active');
+                currentTable = order.table;
+                updateTableDisplay();
+                
+                // Load the cart
+                cart = [...order.items];
+                updateCart();
+                
+                // Close the modal
+                holdOrdersModal.classList.add('hidden');
+            }
+        }
+
+        function deleteHeldOrder(index) {
+            if (index >= 0 && index < heldOrders.length && confirm('Delete this held order?')) {
+                heldOrders.splice(index, 1);
+                saveHeldOrders();
+                showHeldOrders();
+            }
+        }
+
+        function saveHeldOrders() {
+            localStorage.setItem('heldOrders', JSON.stringify(heldOrders));
+        }
+
+        // Order Functions
+        function showOrderConfirmation() {
+            if (cart.length === 0) return;
+
+            let summaryHTML = '<div class="space-y-3 mb-4">';
+            let subtotal = 0;
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                summaryHTML += `
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-700">${item.name} x ${item.quantity}</span>
+                        <span class="font-medium">₹${itemTotal.toFixed(2)}</span>
+                    </div>
+                `;
+            });
+
+            const tax = subtotal + 20;
+            const total = subtotal + tax;
+
+            summaryHTML += `
+                </div>
+                <div class="border-t pt-3">
+                    <div class="flex justify-between mb-1">
+                        <span class="text-gray-700">Subtotal:</span>
+                        <span class="font-medium">₹${subtotal.toFixed(2)}</span>
+                    </div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-gray-700">Tax (10%):</span>
+                        <span class="font-medium">₹${tax.toFixed(2)}</span>
+                    </div>
+                    <div class="flex justify-between font-bold mt-2 pt-2 border-t">
+                        <span class="text-gray-800">Total:</span>
+                        <span class="text-blue-600">₹${total.toFixed(2)}</span>
+                    </div>
+                </div>
+            `;
+
+            orderSummary.innerHTML = summaryHTML;
+            orderModal.classList.remove('hidden');
+        }
+
+        function confirmOrder() {
+            if (cart.length === 0) return;
+
+            // Calculate totals
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.001;
+            const total = subtotal + tax;
+
+            // Create order object
+            const order = {
+                id: currentBillNumber,
+                date: new Date().toISOString(),
+                table: currentTable,
+                items: [...cart],
+                subtotal,
+                tax,
+                total,
+                status: 'completed'
+            };
+
+            // Add to order history
+            orderHistory.push(order);
+            localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+
+            // Increment and save bill number
+            currentBillNumber += 1;
+            localStorage.setItem('lastBillNumber', currentBillNumber.toString());
+
+            // Generate bill (but don't print automatically)
+            generateBill(order);
+
+            // Clear cart
+            cart = [];
+            updateCart();
+
+            // Close modal
+            orderModal.classList.add('hidden');
+
+            // Show success message
+            alert(`Order #${order.id} for ${currentTableDisplay.textContent} has been placed successfully!`);
+        }
+
+        function generateBill(order) {
+            // Set bill details
+            billNumber.textContent = order.id;
+            billDate.textContent = new Date(order.date).toLocaleDateString('en-IN');
+            billTable.textContent = order.table === 0 ? 'Walk-in' : `Table ${order.table}`;
+            
+            // Clear previous items
+            billItemsContainer.innerHTML = '';
+            
+            // Add current items
+            order.items.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                const row = document.createElement('tr');
+                row.className = 'border-b';
+                row.innerHTML = `
+                    <td class="py-1">${item.name}</td>
+                    <td class="text-right py-1">${item.quantity}</td>
+                    <td class="text-right py-1">₹${item.price.toFixed(2)}</td>
+                    <td class="text-right py-1">₹${itemTotal.toFixed(2)}</td>
+                `;
+                billItemsContainer.appendChild(row);
+            });
+            
+            // Set totals
+            billSubtotal.textContent = `₹${order.subtotal.toFixed(2)}`;
+            document.getElementById('bill-tax').textContent = `₹${order.tax.toFixed(2)}`;
+            billTotal.textContent = `₹${order.total.toFixed(2)}`;
+        }
+
+        // Local Storage
+        function saveCartToLocalStorage() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+    </script>
 </body>
 </html>

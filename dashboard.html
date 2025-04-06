@@ -96,20 +96,22 @@
             </div>
         </div>
 
-        <!-- Sales Chart -->
-        <div class="bg-white shadow rounded-lg p-4 mb-6">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-semibold flex items-center">
-                    <i class="fas fa-chart-bar text-blue-500 mr-2"></i> Sales Overview (Last 7 Days)
-                </h2>
-                <div class="flex space-x-2">
-                    <button id="refresh-chart" class="text-blue-500 hover:underline flex items-center">
-                        <i class="fas fa-sync-alt mr-1"></i> Refresh
-                    </button>
-                </div>
-            </div>
-            <canvas id="sales-chart" height="300"></canvas>
+     <!-- Sales Chart -->
+<div class="bg-white shadow rounded-lg p-4 mb-6">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold flex items-center">
+            <i class="fas fa-chart-bar text-blue-500 mr-2"></i> Sales Overview (Last 7 Days)
+        </h2>
+        <div class="flex space-x-2">
+            <button id="refresh-chart" class="text-blue-500 hover:underline flex items-center">
+                <i class="fas fa-sync-alt mr-1"></i> Refresh
+            </button>
         </div>
+    </div>
+    <div class="h-48"> <!-- Fixed height container -->
+        <canvas id="sales-chart"></canvas>
+    </div>
+</div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Recent Orders -->
@@ -127,14 +129,15 @@
                         <thead>
                             <tr class="border-b">
                                 <th class="text-left py-2">Order ID</th>
-                                <th class="text-left py-2">Date</th>
+                                <th class="text-left py-2">Date/Time</th>
+                                <th class="text-left py-2">Table</th>
                                 <th class="text-right py-2">Amount</th>
                                 <th class="text-right py-2">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="recent-orders">
                             <tr>
-                                <td colspan="4" class="text-center py-4 text-gray-500">Loading orders...</td>
+                                <td colspan="5" class="text-center py-4 text-gray-500">Loading orders...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -238,10 +241,71 @@
                 <button id="print-order-btn" class="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center mr-2">
                     <i class="fas fa-print mr-1"></i> Print
                 </button>
+                <button id="edit-order-btn" class="px-4 py-2 bg-yellow-500 text-white rounded-lg flex items-center mr-2">
+                    <i class="fas fa-edit mr-1"></i> Edit
+                </button>
                 <button id="close-order-details-btn" class="px-4 py-2 bg-gray-500 text-white rounded-lg flex items-center">
                     <i class="fas fa-times mr-1"></i> Close
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- Edit Order Modal -->
+    <div id="edit-order-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4 max-h-[80vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold flex items-center">
+                    <i class="fas fa-edit text-blue-500 mr-2"></i> Edit Order
+                </h3>
+                <button id="close-edit-order-modal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="edit-order-form">
+                <input type="hidden" id="edit-order-id">
+                <div class="mb-4">
+                    <label for="edit-order-date" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                    <input type="datetime-local" id="edit-order-date" name="date" required 
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label for="edit-order-table" class="block text-sm font-medium text-gray-700 mb-1">Table Number</label>
+                    <input type="text" id="edit-order-table" name="table" required 
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Order Items</label>
+                    <div id="edit-order-items" class="space-y-2">
+                        <!-- Items will be added here dynamically -->
+                    </div>
+                    <button type="button" id="add-item-btn" class="mt-2 text-blue-500 hover:underline flex items-center">
+                        <i class="fas fa-plus-circle mr-1"></i> Add Item
+                    </button>
+                </div>
+                <div class="border-t pt-4">
+                    <div class="flex justify-between mb-2">
+                        <span class="font-semibold">Subtotal:</span>
+                        <span id="edit-subtotal">₹0.00</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span class="font-semibold">Tax (10%):</span>
+                        <span id="edit-tax">₹0.00</span>
+                    </div>
+                    <div class="flex justify-between font-bold">
+                        <span>Total:</span>
+                        <span id="edit-total">₹0.00</span>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 mt-4">
+                    <button type="button" id="cancel-edit-order" class="px-4 py-2 border border-gray-300 rounded-lg flex items-center">
+                        <i class="fas fa-times mr-1"></i> Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center">
+                        <i class="fas fa-save mr-1"></i> Save Changes
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -342,6 +406,27 @@
             // Print order button
             document.getElementById('print-order-btn').addEventListener('click', printOrderDetails);
 
+            // Edit order button
+            document.getElementById('edit-order-btn').addEventListener('click', () => {
+                const orderId = parseInt(document.getElementById('order-details-modal').dataset.orderId);
+                showEditOrderModal(orderId);
+            });
+
+            // Close edit order modal
+            document.getElementById('close-edit-order-modal').addEventListener('click', () => {
+                document.getElementById('edit-order-modal').classList.add('hidden');
+            });
+
+            document.getElementById('cancel-edit-order').addEventListener('click', () => {
+                document.getElementById('edit-order-modal').classList.add('hidden');
+            });
+
+            // Add item button
+            document.getElementById('add-item-btn').addEventListener('click', addNewItemRow);
+
+            // Edit order form submission
+            document.getElementById('edit-order-form').addEventListener('submit', saveEditedOrder);
+
             // Reset order numbers
             document.getElementById('reset-orders-btn').addEventListener('click', () => {
                 showConfirmModal(
@@ -421,7 +506,7 @@
             if (displayOrders.length === 0) {
                 ordersContainer.innerHTML = `
                     <tr>
-                        <td colspan="4" class="text-center py-4 text-gray-500">No orders found</td>
+                        <td colspan="5" class="text-center py-4 text-gray-500">No orders found</td>
                     </tr>
                 `;
                 return;
@@ -430,12 +515,19 @@
             ordersContainer.innerHTML = '';
             
             displayOrders.forEach((order, index) => {
-                const orderDate = new Date(order.date);
+                const orderDateTime = new Date(order.date);
+                const formattedDate = orderDateTime.toLocaleDateString();
+                const formattedTime = orderDateTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
                 const row = document.createElement('tr');
                 row.className = 'border-b hover:bg-gray-50';
                 row.innerHTML = `
                     <td class="py-2">${order.id}</td>
-                    <td class="py-2">${orderDate.toLocaleDateString()}</td>
+                    <td class="py-2">
+                        <div>${formattedDate}</div>
+                        <div class="text-sm text-gray-500">${formattedTime}</div>
+                    </td>
+                    <td class="py-2">${order.table || 'N/A'}</td>
                     <td class="py-2 text-right">₹${order.total.toFixed(2)}</td>
                     <td class="py-2 text-right">
                         <button class="view-order text-blue-500 hover:underline mr-2" data-id="${order.id}">
@@ -483,6 +575,9 @@
             
             // Hide confirmation modal
             document.getElementById('confirm-modal').classList.add('hidden');
+            
+            // Show success message
+            showToast('Order deleted successfully!', 'success');
         }
 
         function loadRecentExpenses(showAll = false) {
@@ -592,7 +687,7 @@
                 return;
             }
             
-            const orderDate = new Date(order.date);
+            const orderDateTime = new Date(order.date);
             let itemsHTML = '';
             
             order.items.forEach(item => {
@@ -611,8 +706,12 @@
                         <span>${order.id}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="font-semibold">Date:</span>
-                        <span>${orderDate.toLocaleString()}</span>
+                        <span class="font-semibold">Date & Time:</span>
+                        <span>${orderDateTime.toLocaleString()}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-semibold">Table Number:</span>
+                        <span>${order.table || 'N/A'}</span>
                     </div>
                 </div>
                 
@@ -638,7 +737,179 @@
             `;
             
             document.getElementById('order-details-content').innerHTML = content;
+            document.getElementById('order-details-modal').dataset.orderId = orderId;
             document.getElementById('order-details-modal').classList.remove('hidden');
+        }
+
+        function showEditOrderModal(orderId) {
+            const orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
+            const order = orders.find(o => o.id === orderId);
+            
+            if (!order) {
+                alert('Order not found');
+                return;
+            }
+            
+            // Set order ID
+            document.getElementById('edit-order-id').value = orderId;
+            
+            // Convert date to local datetime string for the input field
+            const orderDate = new Date(order.date);
+            const localDateTime = new Date(orderDate.getTime() - (orderDate.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+            
+            // Set form values
+            document.getElementById('edit-order-date').value = localDateTime;
+            document.getElementById('edit-order-table').value = order.table || '';
+            
+            // Clear existing items
+            document.getElementById('edit-order-items').innerHTML = '';
+            
+            // Add order items
+            order.items.forEach((item, index) => {
+                addItemRow(item.name, item.price, item.quantity, index);
+            });
+            
+            // Update totals
+            updateEditOrderTotals();
+            
+            // Show modal
+            document.getElementById('order-details-modal').classList.add('hidden');
+            document.getElementById('edit-order-modal').classList.remove('hidden');
+        }
+
+        function addItemRow(name = '', price = 0, quantity = 1, index = null) {
+            const itemsContainer = document.getElementById('edit-order-items');
+            const itemIndex = index !== null ? index : itemsContainer.children.length;
+            
+            const itemRow = document.createElement('div');
+            itemRow.className = 'flex gap-2 items-end';
+            itemRow.innerHTML = `
+                <div class="flex-1">
+                    <label class="block text-xs text-gray-500 mb-1">Item Name</label>
+                    <input type="text" class="item-name w-full px-2 py-1 border rounded" value="${name}" required>
+                </div>
+                <div class="w-20">
+                    <label class="block text-xs text-gray-500 mb-1">Price</label>
+                    <input type="number" class="item-price w-full px-2 py-1 border rounded" value="${price}" min="0" step="0.01" required>
+                </div>
+                <div class="w-16">
+                    <label class="block text-xs text-gray-500 mb-1">Qty</label>
+                    <input type="number" class="item-quantity w-full px-2 py-1 border rounded" value="${quantity}" min="1" required>
+                </div>
+                <button type="button" class="remove-item px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600" data-index="${itemIndex}">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            itemsContainer.appendChild(itemRow);
+            
+            // Add event listener to remove button
+            itemRow.querySelector('.remove-item').addEventListener('click', (e) => {
+                e.target.closest('div').remove();
+                updateEditOrderTotals();
+            });
+            
+            // Add event listeners to update totals when values change
+            itemRow.querySelector('.item-price').addEventListener('change', updateEditOrderTotals);
+            itemRow.querySelector('.item-quantity').addEventListener('change', updateEditOrderTotals);
+        }
+
+        function addNewItemRow() {
+            addItemRow();
+            updateEditOrderTotals();
+        }
+
+        function updateEditOrderTotals() {
+            const itemsContainer = document.getElementById('edit-order-items');
+            const itemRows = itemsContainer.querySelectorAll('div.flex');
+            
+            let subtotal = 0;
+            
+            itemRows.forEach(row => {
+                const price = parseFloat(row.querySelector('.item-price').value) || 0;
+                const quantity = parseInt(row.querySelector('.item-quantity').value) || 0;
+                subtotal += price * quantity;
+            });
+            
+            const tax = subtotal * 0.10; // 10% tax
+            const total = subtotal + tax;
+            
+            document.getElementById('edit-subtotal').textContent = `₹${subtotal.toFixed(2)}`;
+            document.getElementById('edit-tax').textContent = `₹${tax.toFixed(2)}`;
+            document.getElementById('edit-total').textContent = `₹${total.toFixed(2)}`;
+        }
+
+        function saveEditedOrder(e) {
+            e.preventDefault();
+            
+            const orderId = parseInt(document.getElementById('edit-order-id').value);
+            const date = document.getElementById('edit-order-date').value;
+            const table = document.getElementById('edit-order-table').value;
+            
+            // Get all items
+            const itemsContainer = document.getElementById('edit-order-items');
+            const itemRows = itemsContainer.querySelectorAll('div.flex');
+            
+            if (itemRows.length === 0) {
+                alert('Please add at least one item');
+                return;
+            }
+            
+            const items = [];
+            let subtotal = 0;
+            
+            itemRows.forEach(row => {
+                const name = row.querySelector('.item-name').value;
+                const price = parseFloat(row.querySelector('.item-price').value) || 0;
+                const quantity = parseInt(row.querySelector('.item-quantity').value) || 0;
+                
+                if (name && price > 0 && quantity > 0) {
+                    items.push({ name, price, quantity });
+                    subtotal += price * quantity;
+                }
+            });
+            
+            if (items.length === 0) {
+                alert('Please add valid items');
+                return;
+            }
+            
+            const tax = subtotal * 0.10; // 10% tax
+            const total = subtotal + tax;
+            
+            // Update order in storage
+            const orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
+            const orderIndex = orders.findIndex(o => o.id === orderId);
+            
+            if (orderIndex === -1) {
+                alert('Order not found');
+                return;
+            }
+            
+            orders[orderIndex] = {
+                ...orders[orderIndex],
+                date,
+                table,
+                items,
+                subtotal,
+                tax,
+                total
+            };
+            
+            localStorage.setItem('orderHistory', JSON.stringify(orders));
+            
+            // Hide modal
+            document.getElementById('edit-order-modal').classList.add('hidden');
+            
+            // Refresh data
+            loadDashboardData();
+            loadRecentOrders();
+            
+            // Show success message
+            showToast('Order updated successfully!', 'success');
+            
+            // Show updated order details
+            showOrderDetails(orderId);
         }
 
         function printOrderDetails() {
@@ -662,66 +933,70 @@
         }
 
         function renderSalesChart() {
-            const orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
-            
-            // Get last 7 days
-            const dates = [];
-            const salesData = [];
-            
-            for (let i = 6; i >= 0; i--) {
-                const date = new Date();
-                date.setDate(date.getDate() - i);
-                const dateString = date.toISOString().split('T')[0];
-                dates.push(date.toLocaleDateString(undefined, { weekday: 'short' }));
-                
-                const dayOrders = orders.filter(order => order.date.includes(dateString));
-                const daySales = dayOrders.reduce((sum, order) => sum + order.total, 0);
-                salesData.push(daySales);
-            }
-            
-            const ctx = document.getElementById('sales-chart').getContext('2d');
-            
-            // Destroy previous chart if it exists
-            if (window.salesChart) {
-                window.salesChart.destroy();
-            }
-            
-            window.salesChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: dates,
-                    datasets: [{
-                        label: 'Daily Sales (₹)',
-                        data: salesData,
-                        backgroundColor: 'rgba(59, 130, 246, 0.7)',
-                        borderColor: 'rgba(59, 130, 246, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return '₹' + value;
-                                }
-                            }
-                        }
-                    },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return 'Sales: ₹' + context.raw.toFixed(2);
-                                }
-                            }
+    const orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
+    
+    // Get last 7 days
+    const dates = [];
+    const salesData = [];
+    
+    for (let i = 6; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const dateString = date.toISOString().split('T')[0];
+        dates.push(date.toLocaleDateString(undefined, { weekday: 'short' }));
+        
+        const dayOrders = orders.filter(order => order.date.includes(dateString));
+        const daySales = dayOrders.reduce((sum, order) => sum + order.total, 0);
+        salesData.push(daySales);
+    }
+    
+    const ctx = document.getElementById('sales-chart').getContext('2d');
+    
+    // Destroy previous chart if it exists
+    if (window.salesChart) {
+        window.salesChart.destroy();
+    }
+    
+    window.salesChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: 'Daily Sales (₹)',
+                data: salesData,
+                backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                borderColor: 'rgba(59, 130, 246, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false, // This is key for fixed height
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '₹' + value;
                         }
                     }
                 }
-            });
+            },
+            plugins: {
+                legend: {
+                    display: false // Hide the legend to save space
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return 'Sales: ₹' + context.raw.toFixed(2);
+                        }
+                    }
+                }
+            }
         }
+    });
+}
 
         function logout() {
             localStorage.removeItem('isLoggedIn');

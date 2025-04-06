@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = document.getElementById('password').value;
 
         // Check credentials (in production, this would be a server-side check)
-        if (username === 'admin' && password === 'hotel123') {
+        if (username === 'admin' && password === 'akshay1236') {
             // Successful login
             localStorage.setItem('isLoggedIn', 'true');
             window.location.href = 'dashboard.html';
